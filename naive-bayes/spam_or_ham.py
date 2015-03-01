@@ -103,6 +103,7 @@ def get_training_and_validation_sets(feature_sets):
 def run_classification(training_set, validation_set):
     # train the NaiveBayesClassifier on the training_set
     classifier = nltk.NaiveBayesClassifier.train(training_set)
+    print classifier
     # let's see how accurate it was
     accuracy = nltk.classify.accuracy(classifier, validation_set)
     print "The accuracy was.... {}".format(accuracy)
