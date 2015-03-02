@@ -56,22 +56,24 @@ def sms_features(sms):
 
 
 def get_feature_sets():
-    with open('sms_spam_or_ham.csv') as csvfile:
-        reader = csv.DictReader(csvfile, fieldnames=('label','sms'))
-        rows = []
-        for row in reader:
-            data = (row['sms'], row['label'])
-            rows.append(data)
+    csvfile = open('sms_spam_or_ham.csv', 'rb')
+
+    rows = []
+
+    for row in csv.reader(csvfile):
+        rows.append(row)
 
     output_data = []
 
-    for row in rows[:1000]:
+    for row in rows[:100000]:
+        sms = row[0][1]
+        label = row[0][0]
     # get the sms body and compute the feature dictionary
     # add the tuple of feature_dict, label to output_data
-        feature_dict = sms_features(rows[0][0])
+        feature_dict = sms_features(sms)
 
     # add the tuple of feature_dict, label to output_data
-        data = (feature_dict, rows[0][1])
+        data = (feature_dict, label)
         output_data.append(data)
 
     return output_data
@@ -103,7 +105,6 @@ def get_training_and_validation_sets(feature_sets):
 def run_classification(training_set, validation_set):
     # train the NaiveBayesClassifier on the training_set
     classifier = nltk.NaiveBayesClassifier.train(training_set)
-    print classifier
     # let's see how accurate it was
     accuracy = nltk.classify.accuracy(classifier, validation_set)
     print "The accuracy was.... {}".format(accuracy)
